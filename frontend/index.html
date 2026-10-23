@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Francisco Bolzan – Software / Infrastructure Engineer</title>
+  <meta name="description" content="CV of Francisco Bolzan, Software / Infrastructure Engineer with experience in cloud infrastructure, DevOps and large-scale data collection.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="page-header">
+    <p class="visitors">Visitors: <span id="visitor-count">–</span></p>
+    <h1>Francisco Bolzan</h1>
+    <p class="role">Software / Infrastructure Engineer</p>
+    <ul class="contact">
+      <li>Rosario, Santa Fe, Argentina</li>
+      <li><a href="https://www.linkedin.com/in/francisco-bolzan" rel="noopener">linkedin.com/in/francisco-bolzan</a></li>
+      <li><a href="https://github.com/FranBlz" rel="noopener">github.com/FranBlz</a></li>
+    </ul>
+  </header>
+
+  <main>
+    <section id="summary">
+      <h2>Summary</h2>
+      <p>Software / Infrastructure Engineer with three years of experience in Cloud Infrastructure and DevOps, complemented by six months of research building large-scale data collection and processing systems in Python. Experienced in cloud and on-premise infrastructure, automation, container orchestration, monitoring and data pipelines. Currently seeking opportunities in Data Engineering, Cloud and DevOps.</p>
+    </section>
+
+    <section id="experience">
+      <h2>Experience</h2>
+
+      <article class="entry">
+        <div class="entry-line">
+          <h3>Research Assistant</h3>
+          <p class="dates"><time datetime="2025-11">Nov 2025</time> – <time datetime="2026-05">May 2026</time></p>
+        </div>
+        <div class="entry-line">
+          <p class="org">IMDEA Software Institute</p>
+          <p class="place">Madrid, Spain</p>
+        </div>
+        <ul>
+          <li>Selected through a competitive open call for a fixed-term, six-month research position.</li>
+          <li>Designed and developed pure_cdp, a web-crawling framework built directly on the Chrome DevTools Protocol for automated capture of browsing events and data.</li>
+          <li>Developed parallel crawling infrastructure for reproducible large-scale data collection, processing more than 20,000 sites per run.</li>
+          <li>Built a Python (pandas) post-processing pipeline that normalises and aggregates millions of crawl log entries across runs while preserving data integrity.</li>
+          <li>Systematically compared Selenium, Playwright and pure_cdp over identical workloads to evaluate how automation-tool choice affects web privacy measurement results.</li>
+          <li>Owned the project end to end, from framework design and development through data analysis, under the guidance of my research supervisor.</li>
+          <li>Wrote my Computer Science thesis on web tracking and privacy measurement based on this research.</li>
+          <li>Worked daily in an international, multicultural research team with English as the sole working language.</li>
+        </ul>
+      </article>
+
+      <article class="entry">
+        <div class="entry-line">
+          <h3>Cloud Infrastructure &amp; DevOps Engineer</h3>
+          <p class="dates"><time datetime="2022-10">Oct 2022</time> – <time datetime="2025-10">Oct 2025</time></p>
+        </div>
+        <div class="entry-line">
+          <p class="org">Labtory</p>
+          <p class="place">Rosario, Argentina</p>
+        </div>
+        <ul>
+          <li>Performed staged migrations of on-premises infrastructure to Azure, including modernisation and maintenance of migrated services, for clients in Argentina and Paraguay.</li>
+          <li>Designed and maintained infrastructure on Azure, AWS and VMware vSphere covering VMs, identity, email, DNS, backup and security services.</li>
+          <li>Automated recurring operations in Python and Bash, including scheduled email dispatch, web scraping, database backups, log handling and data loading.</li>
+          <li>Found and diagnosed a critical fault in a production database's backup process that had left it without snapshot coverage, and shipped a fix using Bash, Kubernetes Jobs and GitLab CI/CD.</li>
+          <li>Managed and configured multi-node Kubernetes clusters hosting client data pipelines; deployed and maintained Airflow with Docker, Helm and GitLab CI/CD.</li>
+          <li>Introduced Infrastructure as Code by provisioning an on-premises Kubernetes cluster on vSphere with Terraform and Ansible; the setup was later promoted to production.</li>
+          <li>Led adoption of Zabbix monitoring across four key client systems, improving visibility of hardware and service health.</li>
+          <li>Worked directly with clients to gather requirements, propose solutions and write operational documentation.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section id="skills">
+      <h2>Technical Skills</h2>
+      <dl class="skills">
+        <div><dt>Languages</dt><dd>Python, Bash, Go, C</dd></div>
+        <div><dt>Cloud &amp; Infrastructure</dt><dd>Linux, Azure, AWS, VMware vSphere, Zabbix, Networking, Identity &amp; Email Services</dd></div>
+        <div><dt>Containers &amp; Orchestration</dt><dd>Kubernetes, Docker, Helm</dd></div>
+        <div><dt>Automation &amp; CI/CD</dt><dd>Terraform, Ansible, GitLab CI/CD, GitHub Actions, Git</dd></div>
+        <div><dt>Databases</dt><dd>SQL, PostgreSQL, MongoDB, Redis</dd></div>
+        <div><dt>Data &amp; Web</dt><dd>pandas, Playwright, Selenium, APIs, Chrome DevTools Protocol, Large-scale Crawling</dd></div>
+      </dl>
+    </section>
+
+    <section id="education">
+      <h2>Education</h2>
+
+      <article class="entry">
+        <h3>Licenciatura en Ciencias de la Computación <span class="note">(five-year degree, BSc + MSc equivalent)</span></h3>
+        <div class="entry-line">
+          <p class="org">Facultad de Ciencias Exactas, Ingeniería y Agrimensura</p>
+          <p class="place">Universidad Nacional de Rosario, Argentina</p>
+        </div>
+        <ul>
+          <li>GPA: 8.59/10</li>
+          <li>Thesis: Web tracking and privacy measurement, based on research at IMDEA Software Institute.</li>
+          <li>Relevant Coursework: Advanced Databases, Parallel Computing, Software Engineering, Modelling and Simulation of Dynamic Systems.</li>
+        </ul>
+      </article>
+
+      <article class="entry">
+        <h3>Technical Secondary School Diploma in Informatics</h3>
+        <div class="entry-line">
+          <p class="org">Instituto Politécnico Superior</p>
+          <p class="place">Universidad Nacional de Rosario, Argentina</p>
+        </div>
+      </article>
+    </section>
+
+    <section id="languages">
+      <h2>Languages</h2>
+      <dl class="skills">
+        <div><dt>Spanish</dt><dd>Native</dd></div>
+        <div><dt>English</dt><dd>C2 (Cambridge Certificate of Proficiency in English)</dd></div>
+      </dl>
+    </section>
+  </main>
+</body>
+</html>
