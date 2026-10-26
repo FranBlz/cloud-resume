@@ -14,7 +14,8 @@ override.tf.json
 *.tfplan
 .terraformrc
 terraform.rc
-# Keep .terraform.lock.hcl committed: it pins provider versions
+infra/build/
+infra/events/response.json
 
 # Python
 __pycache__/
@@ -33,8 +34,9 @@ htmlcov/
 *.key
 .aws/
 
-# Personal documents (the PDF CV has phone and email)
+# Personal documents
 *.pdf
+notes.md
 
 # OS and editor
 .DS_Store
