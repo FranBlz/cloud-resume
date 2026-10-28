@@ -15,7 +15,7 @@ override.tf.json
 .terraformrc
 terraform.rc
 infra/build/
-infra/events/response.json
+response.json
 
 # Python
 __pycache__/

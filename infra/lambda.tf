@@ -1,7 +1,3 @@
-locals {
-  counter_function_name = "${var.prefix}-visitor-counter"
-}
-
 data "archive_file" "visitor_count_script" {
   type        = "zip"
   source_file = "${path.module}/../backend/visitor_counter.py"

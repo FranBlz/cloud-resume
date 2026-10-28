@@ -10,5 +10,10 @@ output "distribution_id" {
 
 output "site_url" {
   description = "Public HTTPS URL of the CV site"
-  value       = "https://${aws_cloudfront_distribution.site_oac_distribution.domain_name}"
+  value       = "https://${local.crc_domain}"
+}
+
+output "api_url" {
+  description = "crc API Gateway URL"
+  value       = aws_apigatewayv2_stage.crc_stage_default.invoke_url
 }
