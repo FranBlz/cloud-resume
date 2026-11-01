@@ -18,6 +18,26 @@ resource "aws_apigatewayv2_stage" "crc_stage_default" {
     throttling_rate_limit  = 1
     throttling_burst_limit = 5
   }
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.crc_api_access_logs.arn
+    format = jsonencode({
+      requestId        = "$context.requestId"
+      requestTime      = "$context.requestTime"
+      ip               = "$context.identity.sourceIp"
+      userAgent        = "$context.identity.userAgent"
+      routeKey         = "$context.routeKey"
+      status           = "$context.status"
+      responseLength   = "$context.responseLength"
+      latencyMs        = "$context.responseLatency"
+      integrationError = "$context.integrationErrorMessage"
+    })
+  }
+}
+
+resource "aws_cloudwatch_log_group" "crc_api_access_logs" {
+  name              = "/aws/apigateway/${var.prefix}-http-api"
+  retention_in_days = 14
 }
 
 resource "aws_apigatewayv2_integration" "crc_lambda_integration" {

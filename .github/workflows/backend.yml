@@ -1,0 +1,86 @@
+name: backend
+on:
+  pull_request:
+    paths: ["backend/**", "infra/**", "tests/**", ".github/workflows/backend.yml"]
+  push:
+    branches: [main]
+    paths: ["backend/**", "infra/**", "tests/**", ".github/workflows/backend.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+      - run: pip install -r backend/requirements-dev.txt ruff
+      - run: ruff check backend tests
+      - run: ruff format --check backend tests
+      - run: pytest
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: "1.16.6" }
+      - run: terraform fmt -check -recursive infra
+      - run: terraform -chdir=infra init -backend=false
+      - run: terraform -chdir=infra validate
+
+  plan:
+    if: github.event_name == 'pull_request'
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_PLAN_ROLE_ARN }}
+          aws-region: us-east-1
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: "1.16.6", terraform_wrapper: false }
+      - run: terraform -chdir=infra init -input=false
+      - run: terraform -chdir=infra plan -input=false -no-color -lock-timeout=60s | tee plan.txt
+      - run: |
+          { echo '```'; cat plan.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+
+  apply:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: checks
+    runs-on: ubuntu-latest
+    concurrency: { group: terraform-apply, cancel-in-progress: false }
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      api_url: ${{ steps.out.outputs.api_url }}
+      site_url: ${{ steps.out.outputs.site_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_APPLY_ROLE_ARN }}
+          aws-region: us-east-1
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: "1.16.6", terraform_wrapper: false }
+      - run: terraform -chdir=infra init -input=false
+      - run: terraform -chdir=infra apply -input=false -auto-approve -lock-timeout=60s
+      - id: out
+        run: |
+          echo "api_url=$(terraform -chdir=infra output -raw api_url)" >> "$GITHUB_OUTPUT"
+          echo "site_url=$(terraform -chdir=infra output -raw site_url)" >> "$GITHUB_OUTPUT"
+
+  smoke:
+    needs: apply
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+      - run: pip install pytest
+      - run: pytest tests/smoke
+        env:
+          API_URL: ${{ needs.apply.outputs.api_url }}
+          SITE_URL: ${{ needs.apply.outputs.site_url }}

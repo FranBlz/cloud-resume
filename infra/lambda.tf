@@ -21,8 +21,9 @@ data "aws_iam_policy_document" "vcount_lambda_trust" {
 }
 
 resource "aws_iam_role" "vcount_lambda_role" {
-  name               = "${var.prefix}-visitor-counter"
-  assume_role_policy = data.aws_iam_policy_document.vcount_lambda_trust.json
+  name                 = "${var.prefix}-visitor-counter"
+  assume_role_policy   = data.aws_iam_policy_document.vcount_lambda_trust.json
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${var.prefix}-boundary"
 }
 
 data "aws_iam_policy_document" "vcount_lambda_permissions" {

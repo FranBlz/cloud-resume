@@ -1,0 +1,4 @@
+boto3
+moto[dynamodb]>=5
+pytest
+ruff==0.16.9

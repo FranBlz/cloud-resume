@@ -1,0 +1,53 @@
+name: frontend
+on:
+  pull_request:
+    paths: ["frontend/**", "tests/test_frontend.py", ".github/workflows/frontend.yml"]
+  push:
+    branches: [main]
+    paths: ["frontend/**", "tests/test_frontend.py", ".github/workflows/frontend.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+      - run: pip install pytest
+      - run: pytest tests/test_frontend.py
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: checks
+    runs-on: ubuntu-latest
+    concurrency: { group: site-deploy, cancel-in-progress: false }
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+      - run: aws s3 sync frontend "s3://${{ vars.SITE_BUCKET }}" --delete
+      - id: inv
+        run: |
+          id=$(aws cloudfront create-invalidation --distribution-id "${{ vars.DISTRIBUTION_ID }}" --paths "/*" --query Invalidation.Id --output text)
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+      - run: aws cloudfront wait invalidation-completed --distribution-id "${{ vars.DISTRIBUTION_ID }}" --id "${{ steps.inv.outputs.id }}"
+
+  smoke:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+      - run: pip install pytest
+      - run: pytest tests/smoke
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
